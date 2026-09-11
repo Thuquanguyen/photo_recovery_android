@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Photo Recovery</string>
+
+    <!-- Common -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_restore">Restore</string>
+    <string name="action_next">Next</string>
+    <string name="action_continue">Continue</string>
+    <string name="action_back">Back</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_done">Done</string>
+    <string name="action_select_all">Select All</string>
+    <string name="action_deselect_all">Deselect All</string>
+    <string name="loading">Loading…</string>
+    <string name="permission_required_title">Media Access Needed</string>
+    <string name="permission_required_message">Please allow access to your photos and videos to continue.</string>
+    <string name="permission_limited_message">Limited access: only selected photos are visible.</string>
+    <string name="open_settings">Open Settings</string>
+
+    <!-- Splash -->
+    <string name="splash_title_part1">Photo </string>
+    <string name="splash_title_part2">Recovery</string>
+    <string name="splash_tagline">DEEP SCAN • SAFE &amp; INSTANT RESTORE</string>
+    <string name="splash_initializing">Initializing deep sector recovery engine…</string>
+    <string name="splash_privacy">100% On-Device &amp; Private</string>
+
+    <!-- Language -->
+    <string name="language_title">Choose Your Language</string>
+    <string name="language_subtitle">Select your preferred language for the app</string>
+    <string name="language_search_hint">Search language</string>
+    <string name="language_popular">Popular</string>
+    <string name="language_all">All Languages</string>
+    <string name="language_confirm">Confirm</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_step_of">STEP %1$d OF %2$d</string>
+    <string name="onboarding_get_started">Get Started Now</string>
+    <string name="onboarding1_title">Deep Sector Photo Scan</string>
+    <string name="onboarding1_desc">Scan cache &amp; internal storage to find lost or deleted photos with ease.</string>
+    <string name="onboarding1_trust">100% On-Device &amp; Private • Encrypted</string>
+    <string name="onboarding1_feature1_title">Deep Scan</string>
+    <string name="onboarding1_feature1_desc">Multi-layer</string>
+    <string name="onboarding1_feature2_title">All Formats</string>
+    <string name="onboarding1_feature2_desc">JPG PNG RAW</string>
+    <string name="onboarding1_feature3_title">Fast Engine</string>
+    <string name="onboarding1_feature3_desc">Instant preview</string>
+    <string name="onboarding2_title">Safe &amp; Deep Recovery</string>
+    <string name="onboarding2_desc">Advanced recovery engine restores your cherished memories with zero data loss.</string>
+    <string name="onboarding2_trust">Zero Data Loss Sandbox • 100% On-Device</string>
+    <string name="onboarding2_feature1_title">Deep Search</string>
+    <string name="onboarding2_feature1_desc">Deep sector</string>
+    <string name="onboarding2_feature2_title">Safe Guard</string>
+    <string name="onboarding2_feature2_desc">Zero Loss</string>
+    <string name="onboarding2_feature3_title">Auto Sort</string>
+    <string name="onboarding2_feature3_desc">One-click</string>
+    <string name="onboarding3_title">Restore &amp; Organize in 1-Click</string>
+    <string name="onboarding3_desc">Export recovered photos in original lossless quality and reclaim storage instantly.</string>
+    <string name="onboarding3_trust">Lossless Export Guarantee • 100% On-Device</string>
+    <string name="onboarding3_feature1_title">Original Quality</string>
+    <string name="onboarding3_feature1_desc">Lossless restore</string>
+    <string name="onboarding3_feature2_title">Batch Export</string>
+    <string name="onboarding3_feature2_desc">To Gallery</string>
+    <string name="onboarding3_feature3_title">Smart Cleaner</string>
+    <string name="onboarding3_feature3_desc">Free storage</string>
+
+    <!-- Home -->
+    <string name="home_free_space">Free Space</string>
+    <string name="home_photos_videos">Photos &amp; Videos</string>
+    <string name="home_start_scan">Start Deep Scan</string>
+    <string name="home_quick_clean_title">Quick Swipe Clean</string>
+    <string name="home_quick_clean_desc">Swipe to keep, protect or clean up</string>
+    <string name="home_grid_duplicate">Duplicate Cleaner</string>
+    <string name="home_grid_duplicate_desc">Find &amp; clean identical photos</string>
+    <string name="home_grid_screenshot">Screenshots</string>
+    <string name="home_grid_screenshot_desc">Remove unnecessary captures</string>
+    <string name="home_grid_recently_deleted">Recently Deleted</string>
+    <string name="home_grid_recently_deleted_desc">Restore items within 30 days</string>
+    <string name="home_grid_vault">Secure Vault</string>
+    <string name="home_grid_vault_desc">Locked private media folder</string>
+    <string name="home_ai_pro_badge">AI PRO</string>
+    <string name="home_deep_storage_engine">Deep Storage Engine</string>
+    <string name="home_secure_banner">100% Secure • On-Device Recovery</string>
+    <string name="home_ready_to_scan">Ready to Deep Scan</string>
+    <string name="home_ready_to_scan_desc">Find and restore lost photos, video cache, and accidentally deleted media from your device.</string>
+    <string name="home_scan_ready_suffix">Ready</string>
+    <string name="home_pro_badge">PRO</string>
+    <string name="home_section_smart_clean">Smart Clean &amp; Recovery</string>
+
+    <!-- Photo Recovery -->
+    <string name="photo_recovery_title">Photo Recovery</string>
+    <string name="photo_recovery_banner_count">%1$d Photos &amp; Videos</string>
+    <string name="photo_recovery_subtitle">Select photos/videos to export into the safe \'Restored\' album.</string>
+    <string name="photo_recovery_stat_photos">Photos</string>
+    <string name="photo_recovery_stat_videos">Videos</string>
+    <string name="photo_recovery_stat_restored">Restored</string>
+    <string name="photo_recovery_recover_button">Recover Selected (%1$d)</string>
+    <string name="photo_recovery_success_snackbar">Exported — %1$d photos/videos saved to the \'Restored\' album</string>
+    <string name="photo_recovery_badge_restored">Restored</string>
+    <string name="photo_recovery_empty">No photos or videos found on this device.</string>
+
+    <!-- Quick Swipe Clean -->
+    <string name="quick_clean_title">Quick Swipe Clean</string>
+    <string name="quick_clean_filter_all">All</string>
+    <string name="quick_clean_filter_photos">Photos Only</string>
+    <string name="quick_clean_filter_videos">Videos Only</string>
+    <string name="quick_clean_banner_title">Delete protection</string>
+    <string name="quick_clean_banner_desc">Deleted items go to your device\'s own \'Recently Deleted\'/\'Trash\' per its own recovery policy. Vault items stay private inside the app.</string>
+    <string name="quick_clean_swipe_left_title">Swipe Left: Trash Bin</string>
+    <string name="quick_clean_swipe_left_desc">Permanently deletes from the device (via the system confirmation)</string>
+    <string name="quick_clean_swipe_right_title">Swipe Right: Secure Vault</string>
+    <string name="quick_clean_swipe_right_desc">Moves the item into the app\'s private vault</string>
+    <string name="quick_clean_stat_freed">%1$s Freed</string>
+    <string name="quick_clean_stat_reviewed">%1$d/%2$d Reviewed</string>
+    <string name="quick_clean_stat_protected">%1$d Protected</string>
+    <string name="quick_clean_empty">Nothing left to review.</string>
+    <string name="quick_clean_done">All caught up! No more items to review.</string>
+    <string name="quick_clean_action_delete">Delete</string>
+    <string name="quick_clean_action_previous">Previous</string>
+    <string name="quick_clean_action_next">Next</string>
+    <string name="quick_clean_action_vault">Move to vault</string>
+
+    <!-- Duplicate Cleaner -->
+    <string name="duplicate_title">Clean Storage</string>
+    <string name="duplicate_groups_found">%1$d Groups Found</string>
+    <string name="duplicate_scanned_summary">Scanned %1$d photos • %2$s can be freed</string>
+    <string name="duplicate_badge_verified">CHUNK MD5 HASH VERIFIED</string>
+    <string name="duplicate_analysis_done">100% Analysis Done</string>
+    <string name="duplicate_original_label">Original</string>
+    <string name="duplicate_scan_more">Scan more photos</string>
+    <string name="duplicate_delete_button">Delete Selected (%1$d items • %2$s)</string>
+    <string name="duplicate_empty">No duplicate photos found.</string>
+    <string name="duplicate_scanning">Scanning photos…</string>
+    <string name="duplicate_group_header">Group of %1$d · %2$s</string>
+
+    <!-- Screenshot Cleaner -->
+    <string name="screenshot_title">Screenshot Cleaner</string>
+    <string name="screenshot_smart_audit">SMART STORAGE AUDIT</string>
+    <string name="screenshot_today">Today</string>
+    <string name="screenshot_yesterday">Yesterday</string>
+    <string name="screenshot_older">Older</string>
+    <string name="screenshot_load_more">Load more</string>
+    <string name="screenshot_delete_button">Delete Selected (%1$d)</string>
+    <string name="screenshot_empty">No screenshots found on this device.</string>
+    <string name="screenshot_section_summary">%1$d items · %2$s</string>
+    <string name="screenshot_storage_hint">%1$d screenshots detected</string>
+
+    <!-- Vault -->
+    <string name="vault_title">Secure Vault</string>
+    <string name="vault_empty">Your vault is empty. Protect items from Quick Swipe Clean.</string>
+    <string name="vault_restore">Restore</string>
+    <string name="vault_delete">Delete</string>
+    <string name="vault_delete_confirm_title">Delete permanently?</string>
+    <string name="vault_delete_confirm_message">This item will be permanently removed from the vault. This cannot be undone.</string>
+    <string name="vault_restore_success">Restored to your gallery</string>
+    <string name="vault_delete_success">Deleted from vault</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_terms_privacy">Terms &amp; Privacy Policy</string>
+    <string name="settings_share_app">Share App</string>
+    <string name="settings_contact_support">Contact Support</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_copyright">Photo Recovery Engine by Lab Labs Inc.</string>
+    <string name="settings_free_plan">Free Plan</string>
+    <string name="settings_upgrade_pro">Upgrade Pro</string>
+    <string name="settings_deep_scan_engine">Deep Scan Engine</string>
+    <string name="settings_ready">Ready</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_about">About &amp; App Store</string>
+    <string name="settings_section_support">Support</string>
+    <string name="settings_restore_purchases">Restore Purchases</string>
+    <string name="settings_restore_purchases_desc">Re-activate previous Pro purchases</string>
+    <string name="settings_terms_of_service">Terms of Service</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_desc">100% on-device local photo analysis</string>
+    <string name="settings_share_app_desc">Help friends reclaim lost photo memories</string>
+    <string name="settings_privacy_guaranteed">Privacy Guaranteed</string>
+
+    <!-- Premium (screen exists but is unreachable from navigation, per spec) -->
+    <string name="premium_title">Photo Recovery Pro</string>
+    <string name="premium_yearly">$29.99/year</string>
+    <string name="premium_monthly">$4.99/month</string>
+    <string name="premium_start_trial">Start 3-Day Free Trial</string>
+    <string name="premium_restore_purchases">Restore Purchases</string>
+    <string name="premium_trial_snackbar">Starting free trial…</string>
+    <string name="premium_restore_snackbar">Checking previous purchases…</string>
+    <string name="premium_benefit_1">HEIC/RAW Lossless Export</string>
+    <string name="premium_benefit_2">Deep Cache &amp; Hidden Directory Scan</string>
+    <string name="premium_benefit_3">Ad-Free Experience</string>
+    <string name="premium_benefit_4">Encrypted Vault &amp; Cloud Sync</string>
+    <string name="premium_yearly_title">Yearly Access</string>
+    <string name="premium_yearly_sub">Just $2.50 / mo (billed annually)</string>
+    <string name="premium_monthly_title">Monthly Access</string>
+    <string name="premium_monthly_sub">Cancel anytime in Settings</string>
+    <string name="premium_best_value_badge">Best Value • Save 50%</string>
+    <string name="premium_continue_monthly">Continue with Monthly ($4.99)</string>
+    <string name="photo_recovery_load_more">Load more</string>
+</resources>
