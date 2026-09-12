@@ -199,4 +199,6 @@
     <string name="premium_best_value_badge">Best Value • Save 50%</string>
     <string name="premium_continue_monthly">Continue with Monthly ($4.99)</string>
     <string name="photo_recovery_load_more">Load more</string>
+    <string name="ad_label">Ad</string>
+    <string name="ad_sponsored">Sponsored</string>
 </resources>

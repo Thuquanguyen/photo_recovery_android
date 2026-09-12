@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -32,30 +33,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.appadskit.AdPlacement
+import com.appadskit.AdsConfig
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.AdsSplashGate
+import com.mobile.photo.recovery.io.ads.AppOpenAdManager
+import com.mobile.photo.recovery.io.ads.InterstitialAdHelper
+import com.mobile.photo.recovery.io.ads.NativeAds
+import com.mobile.photo.recovery.io.ads.rememberHostActivity
 import com.mobile.photo.recovery.io.data.Prefs
 import com.mobile.photo.recovery.io.ui.theme.Primary
 import kotlinx.coroutines.delay
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 /**
- * Branded splash. The 2200ms delay and its progress bar are purely cosmetic (spec 4.1) —
- * the only real work done here is reading the onboarding-completed flag to decide where to go.
+ * Branded splash. Duration follows CloudDesk [AdsConfig.splashFirstOpenDelaySeconds],
+ * then [open_splash] App Open, then route.
  */
-private const val SPLASH_DURATION_MS = 2200
-
 @Composable
 fun SplashScreen(onFinished: (onboardingCompleted: Boolean) -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
+    val activity = rememberHostActivity()
+    val delaySec = AdsConfig.splashFirstOpenDelaySeconds.coerceIn(0, 120)
+    val splashDurationMs = (delaySec * 1000).coerceAtLeast(1_200)
     var progress by remember { mutableFloatStateOf(0f) }
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = SPLASH_DURATION_MS, easing = LinearEasing),
+        animationSpec = tween(durationMillis = splashDurationMs, easing = LinearEasing),
         label = "splashProgress"
     )
 
+    DisposableEffect(Unit) {
+        AdsSplashGate.active = true
+        onDispose { AdsSplashGate.active = false }
+    }
+
     LaunchedEffect(Unit) {
+        AdsSplashGate.active = true
+        AppOpenAdManager.get()?.preload(context, AdPlacement.OPEN_SPLASH)
+        InterstitialAdHelper.preload(context)
+        NativeAds.preloadCache(context, AdPlacement.NATIVE_LANGUAGE)
         progress = 1f
-        delay(SPLASH_DURATION_MS.toLong())
+        delay(splashDurationMs.toLong())
+        delay(280)
+        val host = activity
+        if (host != null) {
+            suspendCoroutine { cont ->
+                AppOpenAdManager.get()?.showSplash(host) { cont.resume(Unit) } ?: cont.resume(Unit)
+            }
+        }
+        AdsSplashGate.active = false
         val onboardingCompleted = Prefs.get(context).onboardingCompleted
         onFinished(onboardingCompleted)
     }

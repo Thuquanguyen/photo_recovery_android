@@ -50,7 +50,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.NativeAdLayout
+import com.mobile.photo.recovery.io.ads.NativeAdSlot
 import com.mobile.photo.recovery.io.ui.components.PrimaryPillButton
 import com.mobile.photo.recovery.io.ui.theme.CardSurface
 import com.mobile.photo.recovery.io.ui.theme.LavenderBackground
@@ -228,6 +231,12 @@ fun HomeScreen(
             }
         }
 
+        Spacer(Modifier.height(12.dp))
+        NativeAdSlot(
+            placement = AdPlacement.NATIVE_HOME,
+            layout = NativeAdLayout.Medium
+        )
+
         Spacer(Modifier.height(16.dp))
 
         // Quick Swipe Clean shortcut card
@@ -280,7 +289,9 @@ fun HomeScreen(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
         ) {
             items(
                 listOf(

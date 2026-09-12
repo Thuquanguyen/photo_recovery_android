@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/bg_card"
+  android:padding="8dp">
+
+  <!-- Single image + text + full CTA. Icon OR Media — never both (AdMob policy / readability). -->
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:text="@string/ad_label"
+      android:textAllCaps="true"
+      android:textColor="@color/outline"
+      android:textSize="9sp" />
+
+    <!-- Prefer MediaView; icon used only when no media (toggled in code). -->
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="6dp"
+      android:layout_weight="1"
+      android:minHeight="72dp">
+
+      <com.google.android.gms.ads.nativead.MediaView
+        android:id="@+id/adMedia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+      <ImageView
+        android:id="@+id/adIcon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+      android:id="@+id/adHeadline"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:ellipsize="end"
+      android:gravity="center_horizontal"
+      android:maxLines="4"
+      android:textColor="@color/on_surface"
+      android:textSize="12sp"
+      android:textStyle="bold" />
+
+    <TextView
+      android:id="@+id/adBody"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="2dp"
+      android:ellipsize="end"
+      android:gravity="center_horizontal"
+      android:maxLines="6"
+      android:textColor="@color/on_surface_variant"
+      android:textSize="11sp" />
+
+    <!-- CTA must stay fully readable — never clipped in narrow pillars. -->
+    <Button
+      android:id="@+id/adCallToAction"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:background="@drawable/bg_primary_button"
+      android:gravity="center"
+      android:maxLines="2"
+      android:minHeight="48dp"
+      android:paddingHorizontal="10dp"
+      android:paddingVertical="10dp"
+      android:singleLine="false"
+      android:textAllCaps="false"
+      android:textColor="@color/on_primary"
+      android:textSize="12sp" />
+  </LinearLayout>
+</com.google.android.gms.ads.nativead.NativeAdView>

@@ -65,7 +65,10 @@ import androidx.media3.common.MediaItem as Media3Item
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
+import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.NativeAdLayout
+import com.mobile.photo.recovery.io.ads.NativeAdSlot
 import com.mobile.photo.recovery.io.data.MediaItem
 import com.mobile.photo.recovery.io.ui.components.EmptyMediaState
 import com.mobile.photo.recovery.io.ui.components.LimitedAccessBanner
@@ -180,6 +183,11 @@ private fun PhotoRecoveryContent(
         }
 
         Column(modifier = Modifier.padding(20.dp)) {
+            NativeAdSlot(
+                placement = AdPlacement.NATIVE_SESSIONS,
+                layout = NativeAdLayout.Compact,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
             PrimaryPillButton(
                 text = stringResource(R.string.photo_recovery_recover_button, state.selectedIds.size),
                 enabled = state.selectedIds.isNotEmpty() && !state.isRecovering,

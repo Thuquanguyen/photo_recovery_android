@@ -1,0 +1,30 @@
+{
+  "splashFirstOpenDelaySeconds": 10,
+  "bannerMaxClicksPerDay": 2,
+  "Open": [
+    { "name": "open_splash", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/aaaaaaaaaa", "isShow": true },
+    { "name": "open_resume", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/aaaaaaaaaa", "isShow": true, "delay": 60 }
+  ],
+  "Inter": [
+    { "name": "inter_onboarding_done", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/bbbbbbbbbb", "isShow": true, "frequency": 1, "delay": 0 },
+    { "name": "inter_before_rent", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/bbbbbbbbbb", "isShow": true, "frequency": 4, "delay": 10 },
+    { "name": "inter_session_end", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/bbbbbbbbbb", "isShow": true, "frequency": 1, "delay": 0 },
+    { "name": "inter_support_back", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/bbbbbbbbbb", "isShow": true, "frequency": 1, "delay": 10 }
+  ],
+  "Rewarded": [
+    { "name": "reward_continue", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/cccccccccc", "isShow": true, "delay": 0 },
+    { "name": "reward_extend", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/cccccccccc", "isShow": true, "delay": 0 }
+  ],
+  "Native": [
+    { "name": "native_home", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_language", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_onboard", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_sessions", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_settings", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_sheet", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 1, "isReload": true, "reloadIntervalSeconds": 15 },
+    { "name": "native_console", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/dddddddddd", "isShow": true, "form": 8, "isReload": true, "reloadIntervalSeconds": 45 }
+  ],
+  "Banner": [
+    { "name": "banner_settings", "sdk": "admob", "id": "ca-app-pub-xxxxxxxxxxxxxxxx/eeeeeeeeee", "isShow": true, "isReload": true, "reloadAfterTime": 120 }
+  ]
+}

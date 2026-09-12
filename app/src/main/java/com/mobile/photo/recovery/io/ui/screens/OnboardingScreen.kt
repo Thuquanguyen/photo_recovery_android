@@ -43,6 +43,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +53,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.InterstitialAdHelper
+import com.mobile.photo.recovery.io.ads.NativeAdLayout
+import com.mobile.photo.recovery.io.ads.NativeAdSlot
+import com.mobile.photo.recovery.io.ads.rememberHostActivity
+import com.mobile.photo.recovery.io.ads.showInterstitial
 import com.mobile.photo.recovery.io.data.Prefs
 import com.mobile.photo.recovery.io.ui.components.PrimaryPillButton
 import com.mobile.photo.recovery.io.ui.components.TextOnlyButton
@@ -125,12 +132,22 @@ private val pages = listOf(
 @Composable
 fun OnboardingScreen(onGetStarted: () -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
+    val activity = rememberHostActivity()
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
 
+    LaunchedEffect(Unit) {
+        InterstitialAdHelper.preload(context, AdPlacement.INTER_ONBOARDING_DONE)
+    }
+
     fun finish() {
         Prefs.get(context).onboardingCompleted = true
-        onGetStarted()
+        val host = activity
+        if (host != null) {
+            host.showInterstitial(AdPlacement.INTER_ONBOARDING_DONE, onGetStarted)
+        } else {
+            onGetStarted()
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize().background(LavenderBackground).statusBarsPadding()) {
@@ -200,6 +217,12 @@ fun OnboardingScreen(onGetStarted: () -> Unit) {
                 )
             }
         }
+
+        NativeAdSlot(
+            placement = AdPlacement.NATIVE_ONBOARD,
+            layout = NativeAdLayout.Medium,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
 
         // Single full-width CTA with a trailing arrow, matching the UI spec's bottom action.
         if (pagerState.currentPage == pages.lastIndex) {

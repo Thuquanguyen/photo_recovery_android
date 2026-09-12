@@ -187,4 +187,6 @@
     <string name="settings_terms_of_service">Nutzungsbedingungen</string>
     <string name="settings_upgrade_pro">Auf Pro Upgraden</string>
     <string name="photo_recovery_load_more">Mehr laden</string>
+    <string name="ad_label">Anzeige</string>
+    <string name="ad_sponsored">Gesponsert</string>
 </resources>

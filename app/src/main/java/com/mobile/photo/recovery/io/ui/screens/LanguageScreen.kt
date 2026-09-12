@@ -40,7 +40,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.NativeAdLayout
+import com.mobile.photo.recovery.io.ads.NativeAdSlot
 import com.mobile.photo.recovery.io.data.Prefs
 import com.mobile.photo.recovery.io.ui.theme.LavenderBackground
 import com.mobile.photo.recovery.io.ui.theme.Primary
@@ -151,6 +154,11 @@ private fun LanguageScreenContent(
         }
 
         Column(modifier = Modifier.padding(24.dp)) {
+            NativeAdSlot(
+                placement = AdPlacement.NATIVE_LANGUAGE,
+                layout = NativeAdLayout.Medium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             Button(
                 onClick = onConfirm,
                 shape = androidx.compose.foundation.shape.CircleShape,

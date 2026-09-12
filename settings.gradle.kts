@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Photo Recovery"
 include(":app")
+include(":app-ads-kit")
+project(":app-ads-kit").projectDir = file("packages/AppAdsKit/android")

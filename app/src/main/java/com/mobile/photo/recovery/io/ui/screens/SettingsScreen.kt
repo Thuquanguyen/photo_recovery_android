@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,7 +50,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
+import com.mobile.photo.recovery.io.ads.BannerAdSlot
+import com.mobile.photo.recovery.io.ads.NativeAdLayout
+import com.mobile.photo.recovery.io.ads.NativeAdSlot
 import com.mobile.photo.recovery.io.ui.theme.CardSurface
 import com.mobile.photo.recovery.io.ui.theme.LavenderBackground
 import com.mobile.photo.recovery.io.ui.theme.NeutralDark
@@ -110,6 +116,7 @@ fun SettingsScreen(onChangeLanguage: () -> Unit, onBack: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(20.dp),
         ) {
             // App info card
@@ -300,6 +307,16 @@ fun SettingsScreen(onChangeLanguage: () -> Unit, onBack: () -> Unit = {}) {
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
+
+            NativeAdSlot(
+                placement = AdPlacement.NATIVE_SETTINGS,
+                layout = NativeAdLayout.Default,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+            BannerAdSlot(
+                placement = AdPlacement.BANNER_SETTINGS,
+                modifier = Modifier.padding(top = 12.dp)
+            )
         }
     }
 }

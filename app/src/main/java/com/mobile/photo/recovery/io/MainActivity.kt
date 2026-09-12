@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.mobile.photo.recovery.io.ads.AppOpenAdManager
 import com.mobile.photo.recovery.io.ui.nav.PhotoRecoveryNavHost
 import com.mobile.photo.recovery.io.ui.theme.PhotoRecoveryTheme
 import com.mobile.photo.recovery.io.util.LocaleHelper
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        AppOpenAdManager.get()?.ensureResumeCached(this)
         setContent {
             val baseContext = LocalContext.current
             // Bumped whenever the confirmed language changes so the whole app re-reads
@@ -60,5 +62,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AppOpenAdManager.get()?.ensureResumeCached(this)
     }
 }
