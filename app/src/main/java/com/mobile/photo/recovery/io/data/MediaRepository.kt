@@ -1,7 +1,6 @@
 package com.mobile.photo.recovery.io.data
 
 import android.app.PendingIntent
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
@@ -63,6 +62,31 @@ class MediaRepository(private val context: Context) {
         )
     }
 
+    /**
+     * Some MediaStore rows have a null/0 FileColumns.SIZE (seen on real devices for dangling
+     * entries whose backing file no longer exists, or metadata the provider hasn't backfilled
+     * yet) — re-check via the item's own content URI, then fall back to the real on-disk length
+     * so a genuinely-present file always reports its true size.
+     */
+    private fun resolveRealSize(uri: Uri): Long {
+        val fromColumn = try {
+            context.contentResolver.query(uri, arrayOf(MediaStore.MediaColumns.SIZE), null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst() && !cursor.isNull(0)) cursor.getLong(0) else 0L
+            } ?: 0L
+        } catch (_: Exception) {
+            0L
+        }
+        if (fromColumn > 0L) return fromColumn
+        // MediaStore's _size column can come back null/0 for a row (seen on-device even via the
+        // type-specific collection) despite the underlying file being fully readable — fall back
+        // to the real on-disk length via the content provider's file descriptor.
+        return try {
+            context.contentResolver.openAssetFileDescriptor(uri, "r")?.use { it.length } ?: 0L
+        } catch (_: Exception) {
+            0L
+        }
+    }
+
     /** Real device free space (spec 4.4 / 5). */
     suspend fun freeSpaceBytes(): Long = withContext(Dispatchers.IO) {
         val stat = StatFs(context.getExternalFilesDir(null)?.path ?: "/")
@@ -87,31 +111,34 @@ class MediaRepository(private val context: Context) {
     }
 
     /**
-     * Runs a paginated query. Appending "LIMIT x OFFSET y" to the sortOrder string (the old
-     * approach) throws "IllegalArgumentException: Invalid token LIMIT" on modern MediaProvider
-     * implementations that validate sortOrder strictly — use the proper Bundle query-args form
-     * (QUERY_ARG_SQL_LIMIT/QUERY_ARG_OFFSET, API 30+) instead, with the old string-based
-     * approach only as a fallback for API < 30.
+     * Runs a query (no SQL LIMIT/OFFSET — appending "LIMIT x OFFSET y" to sortOrder throws
+     * "IllegalArgumentException: Invalid token LIMIT" on modern MediaProvider implementations
+     * that validate sortOrder strictly) and pages the result by walking the cursor to [offset]
+     * and reading up to [limit] rows. The alternative, Bundle-based query-args form
+     * (QUERY_ARG_SQL_SELECTION/QUERY_ARG_LIMIT/QUERY_ARG_OFFSET) avoids that crash too, but on
+     * some MediaProvider implementations it silently returns a null/zero FileColumns.SIZE for
+     * every row — cursor-position paging avoids both problems.
      */
     private fun pagedQuery(
         selection: String,
         selectionArgs: Array<String>?,
         offset: Int,
         limit: Int
-    ): android.database.Cursor? {
-        val sortColumn = MediaStore.Files.FileColumns.DATE_ADDED
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val args = android.os.Bundle().apply {
-                putString(ContentResolver.QUERY_ARG_SQL_SELECTION, selection)
-                putStringArray(ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS, selectionArgs ?: emptyArray())
-                putString(ContentResolver.QUERY_ARG_SQL_SORT_ORDER, "$sortColumn DESC")
-                putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
-                putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
+    ): List<MediaItem> {
+        val sort = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
+        val items = mutableListOf<MediaItem>()
+        context.contentResolver.query(collection(), projection, selection, selectionArgs, sort)?.use { cursor ->
+            if (cursor.moveToPosition(offset)) {
+                var count = 0
+                while (count < limit && !cursor.isAfterLast) {
+                    items.add(rowToItem(cursor))
+                    count++
+                    if (!cursor.moveToNext()) break
+                }
             }
-            context.contentResolver.query(collection(), projection, args, null)
-        } else {
-            val sort = "$sortColumn DESC LIMIT $limit OFFSET $offset"
-            context.contentResolver.query(collection(), projection, selection, selectionArgs, sort)
+        }
+        return items.map { item ->
+            if (item.size > 0L) item else item.copy(size = resolveRealSize(item.uri))
         }
     }
 
@@ -126,11 +153,7 @@ class MediaRepository(private val context: Context) {
             MediaTypeFilter.IMAGES -> "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}"
             MediaTypeFilter.VIDEOS -> "${MediaStore.Files.FileColumns.MEDIA_TYPE} = ${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}"
         }
-        val items = mutableListOf<MediaItem>()
-        pagedQuery(selection, null, offset, limit)?.use { cursor ->
-            while (cursor.moveToNext()) items.add(rowToItem(cursor))
-        }
-        items
+        pagedQuery(selection, null, offset, limit)
     }
 
     /** All items whose bucket (album) name matches one of the known screenshot-folder names (spec 4.8). */
@@ -142,11 +165,7 @@ class MediaRepository(private val context: Context) {
         val placeholders = screenshotBucketNames.joinToString(",") { "?" }
         val selection = "$baseSelection AND lower(${MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME}) IN ($placeholders)"
         val args = screenshotBucketNames.toTypedArray()
-        val items = mutableListOf<MediaItem>()
-        pagedQuery(selection, args, offset, limit)?.use { cursor ->
-            while (cursor.moveToNext()) items.add(rowToItem(cursor))
-        }
-        items
+        pagedQuery(selection, args, offset, limit)
     }
 
     /**

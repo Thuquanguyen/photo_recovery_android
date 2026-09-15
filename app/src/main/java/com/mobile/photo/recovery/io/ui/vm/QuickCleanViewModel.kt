@@ -19,7 +19,10 @@ private const val LOAD_MORE_THRESHOLD = 5
 const val SWIPE_COOLDOWN_MS = 220L
 
 sealed class PendingDeleteRequest {
-    data class OriginalDelete(val item: MediaItem) : PendingDeleteRequest()
+    /** One batched system confirmation for every item swiped/tapped to Bin since the last
+     * confirm — swiping left no longer opens its own system dialog per item (spec-accurate but
+     * a poor real-world UX at speed); the whole queue is confirmed with a single dialog. */
+    data class BatchDelete(val items: List<MediaItem>) : PendingDeleteRequest()
     data class VaultRollback(val item: MediaItem, val vaultPath: String) : PendingDeleteRequest()
 }
 
@@ -32,6 +35,7 @@ data class QuickCleanUiState(
     val reviewedCount: Int = 0,
     val protectedCount: Int = 0,
     val bytesFreed: Long = 0L,
+    val binQueue: List<MediaItem> = emptyList(),
     val pendingDelete: PendingDeleteRequest? = null
 )
 
@@ -99,18 +103,27 @@ class QuickCleanViewModel(app: Application) : AndroidViewModel(app) {
         maybeLoadMore()
     }
 
-    /** Left = request the system delete confirmation for the original file. */
+    /** Left = queue the current item for deletion and move on immediately — no system dialog
+     * per swipe. The whole queue is confirmed together via [confirmBinQueue]. */
     fun requestDelete() {
         val item = currentItem() ?: return
-        _state.value = _state.value.copy(pendingDelete = PendingDeleteRequest.OriginalDelete(item))
+        _state.value = _state.value.copy(binQueue = _state.value.binQueue + item)
+        advance()
+    }
+
+    /** Opens one system delete confirmation covering every item currently queued in the bin. */
+    fun confirmBinQueue() {
+        val items = _state.value.binQueue
+        if (items.isEmpty()) return
+        _state.value = _state.value.copy(pendingDelete = PendingDeleteRequest.BatchDelete(items))
     }
 
     fun onDeleteConfirmed(freedBytes: Long) {
         _state.value = _state.value.copy(
             bytesFreed = _state.value.bytesFreed + freedBytes,
+            binQueue = emptyList(),
             pendingDelete = null
         )
-        advance()
     }
 
     fun onDeleteCancelled() {
@@ -156,5 +169,11 @@ class QuickCleanViewModel(app: Application) : AndroidViewModel(app) {
 
     suspend fun deleteUriDirect(uri: Uri): Boolean = mediaRepository.deleteDirect(uri)
 
-    fun createDeleteRequest(uri: Uri) = mediaRepository.createDeleteRequest(listOf(uri))
+    suspend fun deleteUrisDirect(uris: List<Uri>): Boolean {
+        var allOk = true
+        for (uri in uris) if (!mediaRepository.deleteDirect(uri)) allOk = false
+        return allOk
+    }
+
+    fun createDeleteRequest(uris: List<Uri>) = mediaRepository.createDeleteRequest(uris)
 }

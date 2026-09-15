@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.compose.setContent
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -29,7 +29,20 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // enableEdgeToEdge()'s own default still applies a translucent scrim over the status bar
+        // on some API levels for legibility, which reads as "status bar color doesn't quite match
+        // the screen behind it" — force both bars fully transparent so each screen's own
+        // background/header paints through with no tint on top.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT
+            )
+        )
         AppOpenAdManager.get()?.ensureResumeCached(this)
         setContent {
             val baseContext = LocalContext.current
@@ -50,13 +63,14 @@ class MainActivity : ComponentActivity() {
                 LocalContext provides localizedContext
             ) {
                 PhotoRecoveryTheme {
-                    // enableEdgeToEdge() draws behind the status/navigation bars on purpose so
-                    // each screen's own background color shows through behind them (matching the
-                    // UI spec's edge-to-edge look) instead of a flat system color. Only the
-                    // navigation-bar side needs padding here (buttons must clear the gesture
-                    // bar); each screen pads its own top content below the status bar itself
-                    // via statusBarsPadding() so its background still bleeds to the very top.
-                    Surface(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
+                    // enableEdgeToEdge() draws behind both the status AND navigation bars on
+                    // purpose so each screen's own background color shows through behind them
+                    // (matching the UI spec's edge-to-edge look) instead of a flat system color —
+                    // no inset padding here at all. Each screen pads its own top content below
+                    // the status bar (statusBarsPadding()) and its own bottom buttons/content
+                    // above the gesture bar (navigationBarsPadding()) individually, so their
+                    // backgrounds still bleed edge-to-edge on every side.
+                    Surface(modifier = Modifier.fillMaxSize()) {
                         PhotoRecoveryNavHost(onLanguageApplied = { localeVersion++ })
                     }
                 }

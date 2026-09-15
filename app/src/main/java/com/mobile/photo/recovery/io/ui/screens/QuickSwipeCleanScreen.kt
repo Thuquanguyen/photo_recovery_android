@@ -1,12 +1,13 @@
 package com.mobile.photo.recovery.io.ui.screens
 
 import android.app.Activity
-import android.content.IntentSender
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,33 +15,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.Undo
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.VerifiedUser
-import androidx.compose.material.icons.filled.Videocam
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -56,6 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -72,13 +75,34 @@ import com.mobile.photo.recovery.io.R
 import com.mobile.photo.recovery.io.data.MediaItem
 import com.mobile.photo.recovery.io.data.MediaTypeFilter
 import com.mobile.photo.recovery.io.ui.components.EmptyMediaState
+import com.mobile.photo.recovery.io.ui.components.GhostCircleButton
 import com.mobile.photo.recovery.io.ui.components.LimitedAccessBanner
 import com.mobile.photo.recovery.io.ui.components.PermissionRequiredState
-import com.mobile.photo.recovery.io.ui.components.StatChip
+import com.mobile.photo.recovery.io.ui.components.ScreenSubHeader
+import com.mobile.photo.recovery.io.ui.components.StatusPill
+import com.mobile.photo.recovery.io.ui.components.rememberBackAction
 import com.mobile.photo.recovery.io.ui.theme.DangerRed
-import com.mobile.photo.recovery.io.ui.theme.LavenderBackground
+import com.mobile.photo.recovery.io.ui.theme.ErrorContainer
+import com.mobile.photo.recovery.io.ui.theme.InverseSurface
+import com.mobile.photo.recovery.io.ui.theme.OnErrorContainer
+import com.mobile.photo.recovery.io.ui.theme.OnPrimaryFixed
+import com.mobile.photo.recovery.io.ui.theme.OnSecondaryContainer
+import com.mobile.photo.recovery.io.ui.theme.OnSurface
+import com.mobile.photo.recovery.io.ui.theme.OnSurfaceVariant
+import com.mobile.photo.recovery.io.ui.theme.OnTertiaryFixed
+import com.mobile.photo.recovery.io.ui.theme.OutlineVariant
 import com.mobile.photo.recovery.io.ui.theme.Primary
+import com.mobile.photo.recovery.io.ui.theme.PrimaryFixed
 import com.mobile.photo.recovery.io.ui.theme.Secondary
+import com.mobile.photo.recovery.io.ui.theme.SecondaryContainer
+import com.mobile.photo.recovery.io.ui.theme.Surface
+import com.mobile.photo.recovery.io.ui.theme.SurfaceContainer
+import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerHigh
+import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerHighest
+import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerLow
+import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerLowest
+import com.mobile.photo.recovery.io.ui.theme.Tertiary
+import com.mobile.photo.recovery.io.ui.theme.TertiaryFixed
 import com.mobile.photo.recovery.io.ui.vm.PendingDeleteRequest
 import com.mobile.photo.recovery.io.ui.vm.QuickCleanViewModel
 import com.mobile.photo.recovery.io.ui.vm.SWIPE_COOLDOWN_MS
@@ -86,7 +110,6 @@ import com.mobile.photo.recovery.io.util.MediaPermissionStatus
 import com.mobile.photo.recovery.io.util.formatBytes
 import com.mobile.photo.recovery.io.util.openAppSettings
 import com.mobile.photo.recovery.io.util.rememberMediaPermissionState
-import kotlin.math.roundToInt
 
 @Composable
 fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
@@ -94,6 +117,7 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     val haptic = LocalHapticFeedback.current
+    val onBack = rememberBackAction()
 
     LaunchedEffect(permissionStatus) {
         if (permissionStatus != MediaPermissionStatus.DENIED) viewModel.loadInitial() else requestPermission()
@@ -105,10 +129,10 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
         val pending = state.pendingDelete
         val confirmed = result.resultCode == Activity.RESULT_OK
         when (pending) {
-            is PendingDeleteRequest.OriginalDelete -> {
+            is PendingDeleteRequest.BatchDelete -> {
                 if (confirmed) {
                     haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress)
-                    viewModel.onDeleteConfirmed(pending.item.size)
+                    viewModel.onDeleteConfirmed(pending.items.sumOf { it.size })
                 } else {
                     viewModel.onDeleteCancelled()
                 }
@@ -125,81 +149,158 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
         }
     }
 
-    // Whenever a delete is pending, trigger the system confirmation (Android 11+) or delete directly (older).
+    // Whenever a delete is pending, trigger ONE system confirmation covering every queued item
+    // (Android 11+) or delete directly (older) — not one dialog per swipe.
     LaunchedEffect(state.pendingDelete) {
         val pending = state.pendingDelete ?: return@LaunchedEffect
-        val uri = when (pending) {
-            is PendingDeleteRequest.OriginalDelete -> pending.item.uri
-            is PendingDeleteRequest.VaultRollback -> pending.item.uri
+        val uris = when (pending) {
+            is PendingDeleteRequest.BatchDelete -> pending.items.map { it.uri }
+            is PendingDeleteRequest.VaultRollback -> listOf(pending.item.uri)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val pendingIntent = viewModel.createDeleteRequest(uri)
+            val pendingIntent = viewModel.createDeleteRequest(uris)
             if (pendingIntent != null) {
                 deleteRequestLauncher.launch(IntentSenderRequest.Builder(pendingIntent.intentSender).build())
             }
         } else {
-            val ok = viewModel.deleteUriDirect(uri)
             when (pending) {
-                is PendingDeleteRequest.OriginalDelete ->
-                    if (ok) viewModel.onDeleteConfirmed(pending.item.size) else viewModel.onDeleteCancelled()
-                is PendingDeleteRequest.VaultRollback ->
+                is PendingDeleteRequest.BatchDelete -> {
+                    val ok = viewModel.deleteUrisDirect(uris)
+                    if (ok) viewModel.onDeleteConfirmed(pending.items.sumOf { it.size }) else viewModel.onDeleteCancelled()
+                }
+                is PendingDeleteRequest.VaultRollback -> {
+                    val ok = viewModel.deleteUriDirect(pending.item.uri)
                     if (ok) viewModel.onProtectDeleteConfirmed() else viewModel.onProtectDeleteCancelled()
+                }
             }
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
+    val totalCount = state.reviewedCount + (state.queue.size - state.currentIndex)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Surface)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = 20.dp)
+    ) {
         if (permissionStatus == MediaPermissionStatus.LIMITED) LimitedAccessBanner()
-        Card(
+
+        ScreenSubHeader(
+            title = stringResource(R.string.quick_clean_title),
+            caption = stringResource(R.string.quick_clean_caption),
+            onBack = onBack,
+            trailing = {
+                // The tune control cycles the media filter, exactly as the mockup's filter button does.
+                GhostCircleButton(
+                    icon = Icons.Filled.Tune,
+                    contentDescription = null,
+                    tint = Primary,
+                    onClick = {
+                        viewModel.setFilter(
+                            when (state.filter) {
+                                MediaTypeFilter.ALL -> MediaTypeFilter.IMAGES
+                                MediaTypeFilter.IMAGES -> MediaTypeFilter.VIDEOS
+                                MediaTypeFilter.VIDEOS -> MediaTypeFilter.ALL
+                            }
+                        )
+                    }
+                )
+            }
+        )
+
+        // Dynamic progress & savings strip.
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = LavenderBackground)
+                .clip(RoundedCornerShape(16.dp))
+                .background(SurfaceContainerLowest)
+                .border(1.dp, OutlineVariant.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                .padding(12.dp)
         ) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                val totalCount = state.reviewedCount + (state.queue.size - state.currentIndex)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StatusPill(stringResource(R.string.quick_clean_queue_active))
+                StatusPill(
+                    text = stringResource(R.string.quick_clean_freed, formatBytes(state.bytesFreed)),
+                    leadingIcon = Icons.Filled.DeleteSweep,
+                    container = SecondaryContainer.copy(alpha = 0.4f),
+                    contentColor = Secondary
+                )
+            }
+            Spacer(Modifier.height(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    stringResource(R.string.quick_clean_stat_reviewed, state.reviewedCount, totalCount),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = OnSurface
+                )
+                Text(
+                    stringResource(R.string.quick_clean_stat_protected, state.protectedCount),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Primary
+                )
+            }
+            if (state.binQueue.isNotEmpty()) {
+                Spacer(Modifier.height(6.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(ErrorContainer.copy(alpha = 0.5f))
+                        .clickable { viewModel.confirmBinQueue() }
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Delete, contentDescription = null, tint = DangerRed, modifier = Modifier.size(16.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text(
+                            stringResource(R.string.quick_clean_bin_queue, state.binQueue.size),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = DangerRed
+                        )
+                    }
                     Text(
-                        stringResource(R.string.quick_clean_stat_reviewed, state.reviewedCount, totalCount),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        formatBytes(state.bytesFreed),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Secondary
+                        stringResource(R.string.action_confirm),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = DangerRed
                     )
                 }
-                Spacer(Modifier.height(6.dp))
-                LinearProgressIndicator(
-                    progress = { if (totalCount > 0) state.reviewedCount / totalCount.toFloat() else 0f },
-                    modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
-                    color = Primary,
-                    trackColor = Primary.copy(alpha = 0.15f)
+            }
+            Spacer(Modifier.height(6.dp))
+            LinearProgressIndicator(
+                progress = { if (totalCount > 0) state.reviewedCount / totalCount.toFloat() else 0f },
+                modifier = Modifier.fillMaxWidth().height(6.dp).clip(CircleShape),
+                color = Primary,
+                trackColor = SurfaceContainerHighest.copy(alpha = 0.6f)
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                SwipeHintChip(
+                    icon = Icons.Filled.Delete,
+                    text = stringResource(R.string.quick_clean_swipe_left_short),
+                    accent = DangerRed,
+                    container = ErrorContainer.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StatChip(stringResource(R.string.quick_clean_stat_protected), "${state.protectedCount}")
-                    FilterChip(
-                        selected = state.filter == MediaTypeFilter.ALL,
-                        onClick = { viewModel.setFilter(MediaTypeFilter.ALL) },
-                        label = { Text(stringResource(R.string.quick_clean_filter_all)) }
-                    )
-                    FilterChip(
-                        selected = state.filter == MediaTypeFilter.IMAGES,
-                        onClick = { viewModel.setFilter(MediaTypeFilter.IMAGES) },
-                        label = { Text(stringResource(R.string.quick_clean_filter_photos)) }
-                    )
-                    FilterChip(
-                        selected = state.filter == MediaTypeFilter.VIDEOS,
-                        onClick = { viewModel.setFilter(MediaTypeFilter.VIDEOS) },
-                        label = { Text(stringResource(R.string.quick_clean_filter_videos)) }
-                    )
-                }
+                SwipeHintChip(
+                    icon = Icons.Filled.Lock,
+                    text = stringResource(R.string.quick_clean_swipe_right_short),
+                    accent = Secondary,
+                    container = SecondaryContainer.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
@@ -209,7 +310,27 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
             state.currentIndex >= state.queue.size && state.endReached ->
                 EmptyMediaState(stringResource(R.string.quick_clean_done))
             else -> {
-                Box(modifier = Modifier.weight(1f).padding(horizontal = 24.dp, vertical = 8.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier.weight(1f).fillMaxWidth().padding(vertical = 10.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    // Background deck stacking, so the queue reads as a stack of cards.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.92f)
+                            .fillMaxHeight(0.92f)
+                            .offset(y = 12.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(SurfaceContainerHigh.copy(alpha = 0.5f))
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.96f)
+                            .fillMaxHeight(0.96f)
+                            .offset(y = 6.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(SurfaceContainer.copy(alpha = 0.8f))
+                    )
                     val item = viewModel.currentItem()
                     if (item != null) {
                         SwipeCard(
@@ -228,74 +349,155 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
                     }
                 }
 
+                // Gesture cheatsheet pill.
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 4.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CircleShape)
+                        .background(SurfaceContainerLow)
+                        .padding(vertical = 6.dp, horizontal = 12.dp),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    FilledIconButton(
-                        onClick = { viewModel.requestDelete() },
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = DangerRed.copy(alpha = 0.15f),
-                            contentColor = DangerRed
-                        ),
-                        modifier = Modifier.size(52.dp)
-                    ) { Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.quick_clean_action_delete)) }
+                    GestureHint(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.quick_clean_gesture_bin), DangerRed)
+                    CheatsheetDivider()
+                    GestureHint(Icons.Filled.ArrowDownward, stringResource(R.string.quick_clean_gesture_prev), Tertiary)
+                    CheatsheetDivider()
+                    GestureHint(Icons.Filled.ArrowUpward, stringResource(R.string.quick_clean_gesture_next), Primary)
+                    CheatsheetDivider()
+                    GestureHint(Icons.AutoMirrored.Filled.ArrowForward, stringResource(R.string.quick_clean_gesture_vault), Secondary)
+                }
 
-                    FilledIconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
-                            viewModel.previous()
-                        },
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
-                            contentColor = MaterialTheme.colorScheme.tertiary
-                        ),
-                        modifier = Modifier.size(44.dp)
-                    ) { Icon(Icons.Filled.Undo, contentDescription = stringResource(R.string.quick_clean_action_previous)) }
-
-                    FilledIconButton(
-                        onClick = {
-                            haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
-                            viewModel.skip()
-                        },
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = Primary.copy(alpha = 0.15f),
-                            contentColor = Primary
-                        ),
-                        modifier = Modifier.size(44.dp)
-                    ) { Icon(Icons.Filled.SkipNext, contentDescription = stringResource(R.string.quick_clean_action_next)) }
-
-                    FilledIconButton(
-                        onClick = { viewModel.protectToVault() },
-                        colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = Secondary.copy(alpha = 0.15f),
-                            contentColor = Secondary
-                        ),
-                        modifier = Modifier.size(52.dp)
-                    ) { Icon(Icons.Filled.Lock, contentDescription = stringResource(R.string.quick_clean_action_vault)) }
+                // 4 tactile buttons mirroring the gestures.
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ActionCircle(
+                        icon = Icons.Filled.DeleteForever,
+                        description = stringResource(R.string.quick_clean_action_delete),
+                        container = ErrorContainer,
+                        tint = OnErrorContainer,
+                        size = 52.dp
+                    ) { viewModel.requestDelete() }
+                    Spacer(Modifier.width(16.dp))
+                    ActionCircle(
+                        icon = Icons.Filled.ArrowDownward,
+                        description = stringResource(R.string.quick_clean_action_previous),
+                        container = TertiaryFixed,
+                        tint = OnTertiaryFixed,
+                        size = 44.dp
+                    ) {
+                        haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                        viewModel.previous()
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    ActionCircle(
+                        icon = Icons.Filled.ArrowUpward,
+                        description = stringResource(R.string.quick_clean_action_next),
+                        container = PrimaryFixed,
+                        tint = OnPrimaryFixed,
+                        size = 44.dp
+                    ) {
+                        haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                        viewModel.skip()
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    ActionCircle(
+                        icon = Icons.Filled.Lock,
+                        description = stringResource(R.string.quick_clean_action_vault),
+                        container = SecondaryContainer,
+                        tint = OnSecondaryContainer,
+                        size = 52.dp
+                    ) { viewModel.protectToVault() }
                 }
             }
         }
 
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = LavenderBackground)
+        // Safety & auto-purge reassurance banner.
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(SurfaceContainerLow)
+                .padding(12.dp),
+            verticalAlignment = Alignment.Top
         ) {
-            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
-                Icon(Icons.Filled.VerifiedUser, contentDescription = null, tint = Primary, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(8.dp))
-                Column {
-                    Text(stringResource(R.string.quick_clean_banner_title), style = MaterialTheme.typography.titleMedium)
-                    Text(
-                        stringResource(R.string.quick_clean_banner_desc),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 2.dp)
-                    )
-                }
+            Icon(Icons.Filled.VerifiedUser, contentDescription = null, tint = Primary, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+            Column {
+                Text(
+                    stringResource(R.string.quick_clean_banner_title),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = OnSurface
+                )
+                Text(
+                    stringResource(R.string.quick_clean_banner_desc),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = OnSurfaceVariant,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun SwipeHintChip(
+    icon: ImageVector,
+    text: String,
+    accent: Color,
+    container: Color,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(container)
+            .border(1.dp, accent.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(icon, contentDescription = null, tint = accent, modifier = Modifier.size(15.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(text, style = MaterialTheme.typography.labelSmall, color = accent, maxLines = 1)
+    }
+}
+
+@Composable
+private fun GestureHint(icon: ImageVector, label: String, tint: Color) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(14.dp))
+        Spacer(Modifier.width(4.dp))
+        Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, color = OnSurfaceVariant)
+    }
+}
+
+@Composable
+private fun CheatsheetDivider() {
+    Box(modifier = Modifier.height(10.dp).width(1.dp).background(OutlineVariant))
+}
+
+@Composable
+private fun ActionCircle(
+    icon: ImageVector,
+    description: String,
+    container: Color,
+    tint: Color,
+    size: androidx.compose.ui.unit.Dp,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(CircleShape)
+            .background(container)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(icon, contentDescription = description, tint = tint, modifier = Modifier.size(size * 0.45f))
     }
 }
 
@@ -323,15 +525,17 @@ private fun SwipeCard(
         }
     }
 
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.75f)
+            .aspectRatio(0.8f)
             .graphicsLayer {
                 translationX = offsetX
                 translationY = offsetY
                 rotationZ = (offsetX / 40).coerceIn(-12f, 12f)
             }
+            .clip(RoundedCornerShape(16.dp))
+            .background(SurfaceContainerLowest)
             .pointerInput(item.id) {
                 detectDragGestures(
                     onDrag = { change, dragAmount ->
@@ -345,62 +549,90 @@ private fun SwipeCard(
                         offsetY = 0f
                     }
                 )
-            },
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black)
+            }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            if (item.isVideo) {
-                VideoPreview(item)
-            } else {
-                AsyncImage(
-                    model = item.uri,
-                    contentDescription = item.displayName,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+        if (item.isVideo) {
+            VideoPreview(item)
+        } else {
+            AsyncImage(
+                model = item.uri,
+                contentDescription = item.displayName,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
-            if (item.isVideo) {
-                Icon(
-                    Icons.Filled.Videocam,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(12.dp)
-                        .background(Color.Black.copy(alpha = 0.45f), CircleShape)
-                        .padding(6.dp)
-                        .size(16.dp)
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .fillMaxWidth()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.75f))
+        // Scrim for contrast.
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            InverseSurface.copy(alpha = 0.5f),
+                            InverseSurface.copy(alpha = 0.15f),
+                            InverseSurface.copy(alpha = 0.9f)
                         )
                     )
-                    .padding(16.dp)
-            ) {
-                Column {
-                    Text(
-                        item.displayName,
-                        color = Color.White,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        formatBytes(item.size),
-                        color = Color.White.copy(alpha = 0.85f),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
+                )
+        )
+
+        // Top overlay: media type tag, size and a play chip for videos.
+        Row(
+            modifier = Modifier.align(Alignment.TopStart).fillMaxWidth().padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                OverlayTag(if (item.isVideo) "VIDEO" else "PHOTO", icon = if (item.isVideo) Icons.Filled.PlayArrow else null)
+                OverlayTag(formatBytes(item.size))
             }
         }
+
+        // Bottom metadata tray.
+        Column(
+            modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth().padding(12.dp)
+        ) {
+            Text(
+                item.displayName,
+                color = Color.White,
+                style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1
+            )
+            Spacer(Modifier.height(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    stringResource(R.string.quick_clean_swipe_left_short).uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = ErrorContainer
+                )
+                Text(
+                    stringResource(R.string.quick_clean_swipe_right_short).uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = SecondaryContainer
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun OverlayTag(text: String, icon: ImageVector? = null) {
+    Row(
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(InverseSurface.copy(alpha = 0.6f))
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (icon != null) {
+            Icon(icon, contentDescription = null, tint = SecondaryContainer, modifier = Modifier.size(13.dp))
+            Spacer(Modifier.width(4.dp))
+        }
+        Text(text, style = MaterialTheme.typography.labelSmall, color = Color.White)
     }
 }
 

@@ -29,26 +29,29 @@ fun PrimaryPillButton(
     trailingIcon: ImageVector? = null,
     leadingIcon: ImageVector? = null,
     containerColor: Color = Primary,
+    contentColor: Color = Color.White,
+    height: androidx.compose.ui.unit.Dp = 52.dp,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(containerColor = containerColor, contentColor = Color.White),
+        colors = ButtonDefaults.buttonColors(containerColor = containerColor, contentColor = contentColor),
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp),
-        modifier = modifier.height(52.dp)
+        modifier = modifier.height(height)
     ) {
         if (trailingIcon != null || leadingIcon != null) {
             androidx.compose.foundation.layout.Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
                 if (leadingIcon != null) Icon(leadingIcon, contentDescription = null, modifier = Modifier.size(20.dp))
-                Text(text, style = MaterialTheme.typography.labelLarge)
+                Text(text, style = MaterialTheme.typography.titleMedium, maxLines = 1)
                 if (trailingIcon != null) Icon(trailingIcon, contentDescription = null, modifier = Modifier.size(20.dp))
             }
         } else {
-            Text(text, style = MaterialTheme.typography.labelLarge)
+            Text(text, style = MaterialTheme.typography.titleMedium, maxLines = 1)
         }
     }
 }
