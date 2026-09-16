@@ -54,7 +54,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.appadskit.AdPlacement
 import com.mobile.photo.recovery.io.R
-import com.mobile.photo.recovery.io.ads.BannerAdSlot
 import com.mobile.photo.recovery.io.ads.NativeAdLayout
 import com.mobile.photo.recovery.io.ads.NativeAdSlot
 import com.mobile.photo.recovery.io.ui.components.SectionCapsHeader
@@ -401,10 +400,6 @@ fun SettingsScreen(onChangeLanguage: () -> Unit, onBack: () -> Unit = {}) {
                 placement = AdPlacement.NATIVE_SETTINGS,
                 layout = NativeAdLayout.Default,
                 modifier = Modifier.padding(top = 16.dp)
-            )
-            BannerAdSlot(
-                placement = AdPlacement.BANNER_SETTINGS,
-                modifier = Modifier.padding(top = 12.dp)
             )
         }
     }

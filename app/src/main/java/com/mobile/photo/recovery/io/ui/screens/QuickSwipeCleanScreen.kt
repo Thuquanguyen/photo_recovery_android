@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -111,6 +113,7 @@ import com.mobile.photo.recovery.io.util.MediaPermissionStatus
 import com.mobile.photo.recovery.io.util.formatBytes
 import com.mobile.photo.recovery.io.util.openAppSettings
 import com.mobile.photo.recovery.io.util.rememberMediaPermissionState
+import kotlinx.coroutines.launch
 
 @Composable
 fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
@@ -710,19 +713,24 @@ private fun FullscreenSwipeViewer(
     onSwipeUp: () -> Unit,
     onSwipeDown: () -> Unit
 ) {
-    var offsetX by remember(item.id) { mutableFloatStateOf(0f) }
-    var offsetY by remember(item.id) { mutableFloatStateOf(0f) }
+    val offsetX = remember(item.id) { androidx.compose.animation.core.Animatable(0f) }
+    val offsetY = remember(item.id) { androidx.compose.animation.core.Animatable(0f) }
     var lastSwipeTime by remember { mutableStateOf(0L) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
     val threshold = 300f
 
-    fun resolve(dx: Float, dy: Float) {
+    // Returns true if the drag crossed the threshold and fired an action — the caller only
+    // snaps the offset back with a spring when it didn't, so a fired swipe doesn't visibly
+    // reverse before the next item appears.
+    fun resolve(dx: Float, dy: Float): Boolean {
         val now = System.currentTimeMillis()
-        if (now - lastSwipeTime < SWIPE_COOLDOWN_MS) return
-        when {
-            dx < -threshold -> { lastSwipeTime = now; onSwipeLeft() }
-            dx > threshold -> { lastSwipeTime = now; onSwipeRight() }
-            dy < -threshold -> { lastSwipeTime = now; onSwipeUp() }
-            dy > threshold -> { lastSwipeTime = now; onSwipeDown() }
+        if (now - lastSwipeTime < SWIPE_COOLDOWN_MS) return false
+        return when {
+            dx < -threshold -> { lastSwipeTime = now; onSwipeLeft(); true }
+            dx > threshold -> { lastSwipeTime = now; onSwipeRight(); true }
+            dy < -threshold -> { lastSwipeTime = now; onSwipeUp(); true }
+            dy > threshold -> { lastSwipeTime = now; onSwipeDown(); true }
+            else -> false
         }
     }
 
@@ -731,21 +739,25 @@ private fun FullscreenSwipeViewer(
             .fillMaxSize()
             .background(Color.Black)
             .graphicsLayer {
-                translationX = offsetX
-                translationY = offsetY
-                rotationZ = (offsetX / 60).coerceIn(-8f, 8f)
+                translationX = offsetX.value
+                translationY = offsetY.value
+                rotationZ = (offsetX.value / 60).coerceIn(-8f, 8f)
             }
             .pointerInput(item.id) {
                 detectDragGestures(
                     onDrag = { change, dragAmount ->
                         change.consume()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
+                        scope.launch {
+                            offsetX.snapTo(offsetX.value + dragAmount.x)
+                            offsetY.snapTo(offsetY.value + dragAmount.y)
+                        }
                     },
                     onDragEnd = {
-                        resolve(offsetX, offsetY)
-                        offsetX = 0f
-                        offsetY = 0f
+                        val fired = resolve(offsetX.value, offsetY.value)
+                        if (!fired) {
+                            scope.launch { offsetX.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
+                            scope.launch { offsetY.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) }
+                        }
                     }
                 )
             }
