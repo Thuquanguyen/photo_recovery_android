@@ -32,6 +32,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.DeleteSweep
@@ -177,7 +178,12 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
     }
 
     val totalCount = state.reviewedCount + (state.queue.size - state.currentIndex)
+    // TikTok-style full-bleed viewer, opened by tapping the current card — same swipe actions
+    // (left = bin, right = vault, up = skip, down = previous) apply here too, advancing straight
+    // to the next item without leaving fullscreen.
+    var fullscreenViewer by remember { mutableStateOf(false) }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -335,6 +341,7 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
                     if (item != null) {
                         SwipeCard(
                             item = item,
+                            onTap = { fullscreenViewer = true },
                             onSwipeLeft = { viewModel.requestDelete() },
                             onSwipeRight = { viewModel.protectToVault() },
                             onSwipeUp = {
@@ -442,6 +449,29 @@ fun QuickSwipeCleanScreen(viewModel: QuickCleanViewModel = viewModel()) {
             }
         }
     }
+
+    if (fullscreenViewer) {
+        val item = viewModel.currentItem()
+        if (item == null) {
+            fullscreenViewer = false
+        } else {
+            FullscreenSwipeViewer(
+                item = item,
+                onClose = { fullscreenViewer = false },
+                onSwipeLeft = { viewModel.requestDelete() },
+                onSwipeRight = { viewModel.protectToVault() },
+                onSwipeUp = {
+                    haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                    viewModel.skip()
+                },
+                onSwipeDown = {
+                    haptic.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+                    viewModel.previous()
+                }
+            )
+        }
+    }
+    }
 }
 
 @Composable
@@ -504,6 +534,7 @@ private fun ActionCircle(
 @Composable
 private fun SwipeCard(
     item: MediaItem,
+    onTap: () -> Unit,
     onSwipeLeft: () -> Unit,
     onSwipeRight: () -> Unit,
     onSwipeUp: () -> Unit,
@@ -536,6 +567,13 @@ private fun SwipeCard(
             }
             .clip(RoundedCornerShape(16.dp))
             .background(SurfaceContainerLowest)
+            // Tap opens the fullscreen viewer; only fires when the touch never exceeds drag
+            // touch-slop, so it never fights the drag-to-swipe gesture below.
+            .clickable(
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                indication = null,
+                onClick = onTap
+            )
             .pointerInput(item.id) {
                 detectDragGestures(
                     onDrag = { change, dragAmount ->
@@ -658,4 +696,113 @@ private fun VideoPreview(item: MediaItem) {
         },
         modifier = Modifier.fillMaxSize()
     )
+}
+
+/** TikTok-style full-bleed viewer opened by tapping the current [SwipeCard]. Same swipe actions
+ * apply (left = bin, right = vault, up = skip, down = previous); after any of them the queue's
+ * next item renders in the same overlay without closing it, matching a vertical-scroll feed. */
+@Composable
+private fun FullscreenSwipeViewer(
+    item: MediaItem,
+    onClose: () -> Unit,
+    onSwipeLeft: () -> Unit,
+    onSwipeRight: () -> Unit,
+    onSwipeUp: () -> Unit,
+    onSwipeDown: () -> Unit
+) {
+    var offsetX by remember(item.id) { mutableFloatStateOf(0f) }
+    var offsetY by remember(item.id) { mutableFloatStateOf(0f) }
+    var lastSwipeTime by remember { mutableStateOf(0L) }
+    val threshold = 300f
+
+    fun resolve(dx: Float, dy: Float) {
+        val now = System.currentTimeMillis()
+        if (now - lastSwipeTime < SWIPE_COOLDOWN_MS) return
+        when {
+            dx < -threshold -> { lastSwipeTime = now; onSwipeLeft() }
+            dx > threshold -> { lastSwipeTime = now; onSwipeRight() }
+            dy < -threshold -> { lastSwipeTime = now; onSwipeUp() }
+            dy > threshold -> { lastSwipeTime = now; onSwipeDown() }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .graphicsLayer {
+                translationX = offsetX
+                translationY = offsetY
+                rotationZ = (offsetX / 60).coerceIn(-8f, 8f)
+            }
+            .pointerInput(item.id) {
+                detectDragGestures(
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        offsetX += dragAmount.x
+                        offsetY += dragAmount.y
+                    },
+                    onDragEnd = {
+                        resolve(offsetX, offsetY)
+                        offsetX = 0f
+                        offsetY = 0f
+                    }
+                )
+            }
+    ) {
+        if (item.isVideo) {
+            VideoPreview(item)
+        } else {
+            AsyncImage(
+                model = item.uri,
+                contentDescription = item.displayName,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .statusBarsPadding()
+                .padding(16.dp)
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(InverseSurface.copy(alpha = 0.6f))
+                .clickable(
+                    interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClose
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(Icons.Filled.Close, contentDescription = null, tint = Color.White)
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .navigationBarsPadding()
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(item.displayName, color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1)
+            Spacer(Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    stringResource(R.string.quick_clean_swipe_left_short).uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = ErrorContainer
+                )
+                Text(
+                    stringResource(R.string.quick_clean_swipe_right_short).uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = SecondaryContainer
+                )
+            }
+        }
+    }
 }

@@ -75,13 +75,14 @@ import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerLowest
 import com.mobile.photo.recovery.io.ui.theme.Tertiary
 import com.mobile.photo.recovery.io.ui.theme.TertiaryFixed
 
-// raw.githubusercontent.com always serves files as text/plain (nosniff), so an .html page
-// there shows as raw markup instead of rendering — jsdelivr's GitHub CDN mirror serves the
-// correct content type by extension instead, so these actually render in a browser.
+// Both raw.githubusercontent.com and jsdelivr's GitHub mirror force Content-Type: text/plain
+// (with nosniff) on every file regardless of extension, so an .html page there shows as raw
+// markup instead of rendering. htmlpreview.github.io fetches a raw GitHub file client-side and
+// renders it as a real HTML page, which is what actually lets these open readable in a browser.
 private const val PRIVACY_POLICY_URL =
-    "https://cdn.jsdelivr.net/gh/Thuquanguyen/photo_recovery_android@main/policy/privacy_policy.html"
+    "https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/privacy_policy.html"
 private const val TERMS_OF_SERVICE_URL =
-    "https://cdn.jsdelivr.net/gh/Thuquanguyen/photo_recovery_android@main/policy/terms_of_service.html"
+    "https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/terms_of_service.html"
 private const val SUPPORT_EMAIL = "support@photorecovery.app"
 
 /**
