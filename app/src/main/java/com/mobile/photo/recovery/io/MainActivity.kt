@@ -16,6 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.mobile.photo.recovery.io.ads.AppOpenAdManager
 import com.mobile.photo.recovery.io.ui.nav.PhotoRecoveryNavHost
 import com.mobile.photo.recovery.io.ui.theme.PhotoRecoveryTheme
@@ -43,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 android.graphics.Color.TRANSPARENT
             )
         )
+        hideSystemBars()
         AppOpenAdManager.get()?.ensureResumeCached(this)
         setContent {
             val baseContext = LocalContext.current
@@ -80,6 +84,22 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        hideSystemBars()
         AppOpenAdManager.get()?.ensureResumeCached(this)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemBars()
+    }
+
+    /** Hides the status bar and bottom gesture/navigation bar on entry — the user can still
+     * pull either back in temporarily with a swipe (BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE),
+     * which auto-hides them again once released. */
+    private fun hideSystemBars() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
 }

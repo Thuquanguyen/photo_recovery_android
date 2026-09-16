@@ -6,13 +6,27 @@ import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.appadskit.AppAdManager
 import com.appadskit.AdsKit
+
+/** Matches [NativeAds.bind]'s own minimumHeight-per-layout so Compose reserves the slot's
+ * space up front — without this, the AndroidView collapses to 0 height until the ad view
+ * system finishes its own async layout pass, letting the next sibling render over it. */
+private fun NativeAdLayout.minHeightDp(): androidx.compose.ui.unit.Dp = when (this) {
+    NativeAdLayout.Compact, NativeAdLayout.Side -> 0.dp
+    NativeAdLayout.Medium -> 168.dp
+    NativeAdLayout.Default -> 280.dp
+}
+
+/** Standard AdSize.BANNER height used by [BannerAds.bind]. */
+private val BANNER_MIN_HEIGHT = 50.dp
 
 @Composable
 fun rememberHostActivity(): Activity? {
@@ -30,7 +44,7 @@ fun NativeAdSlot(
     }
     if (!visible) return
     AndroidView(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().heightIn(min = layout.minHeightDp()),
         factory = { ctx ->
             FrameLayout(ctx).apply {
                 layoutParams = ViewGroup.LayoutParams(
@@ -58,7 +72,7 @@ fun BannerAdSlot(
     }
     if (!visible) return
     AndroidView(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().heightIn(min = BANNER_MIN_HEIGHT),
         factory = { ctx ->
             FrameLayout(ctx).apply {
                 layoutParams = ViewGroup.LayoutParams(

@@ -19,10 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.Article
@@ -77,12 +75,23 @@ import com.mobile.photo.recovery.io.ui.theme.SurfaceContainerLowest
 import com.mobile.photo.recovery.io.ui.theme.Tertiary
 import com.mobile.photo.recovery.io.ui.theme.TertiaryFixed
 
+// raw.githubusercontent.com always serves files as text/plain (nosniff), so an .html page
+// there shows as raw markup instead of rendering — jsdelivr's GitHub CDN mirror serves the
+// correct content type by extension instead, so these actually render in a browser.
 private const val PRIVACY_POLICY_URL =
-    "https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_restore_new/refs/heads/main/policy"
+    "https://cdn.jsdelivr.net/gh/Thuquanguyen/photo_recovery_android@main/policy/privacy_policy.html"
+private const val TERMS_OF_SERVICE_URL =
+    "https://cdn.jsdelivr.net/gh/Thuquanguyen/photo_recovery_android@main/policy/terms_of_service.html"
 private const val SUPPORT_EMAIL = "support@photorecovery.app"
 
-/** Guards against ActivityNotFoundException when no app can handle the intent (e.g. no browser/mail client). */
+/**
+ * Guards against crashing when no app can handle the intent (e.g. no browser/mail client), and
+ * against "Calling startActivity() from outside of an Activity context requires
+ * FLAG_ACTIVITY_NEW_TASK" — LocalContext here can be the locale-wrapped Context from
+ * MainActivity's createConfigurationContext() rather than the Activity itself.
+ */
 private fun safeStartActivity(context: android.content.Context, intent: Intent) {
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
         context.startActivity(intent)
     } catch (_: android.content.ActivityNotFoundException) {
@@ -309,7 +318,7 @@ fun SettingsScreen(onChangeLanguage: () -> Unit, onBack: () -> Unit = {}) {
                     label = stringResource(R.string.settings_terms_of_service),
                     trailingIcon = Icons.AutoMirrored.Filled.OpenInNew
                 ) {
-                    safeStartActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL)))
+                    safeStartActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(TERMS_OF_SERVICE_URL)))
                 }
                 SettingsDivider()
                 SettingsRow(
