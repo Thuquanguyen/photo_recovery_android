@@ -353,7 +353,10 @@ fun SettingsScreen(onChangeLanguage: () -> Unit, onBack: () -> Unit = {}) {
                 ) {
                     val shareIntent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, "Check out Photo Recovery: $playStoreUrl")
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            context.getString(R.string.settings_share_app_text, playStoreUrl)
+                        )
                     }
                     safeStartActivity(context, Intent.createChooser(shareIntent, null))
                 }

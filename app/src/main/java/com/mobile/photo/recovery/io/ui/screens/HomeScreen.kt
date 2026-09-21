@@ -293,7 +293,7 @@ fun HomeScreen(
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(Icons.Filled.Radar, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp))
                                 Text(
-                                    "SCAN",
+                                    stringResource(R.string.home_scan_button_short),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontSize = 9.sp,
                                     color = Color(0xFFA5F3FC)

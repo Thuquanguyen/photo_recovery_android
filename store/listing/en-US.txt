@@ -1,0 +1,35 @@
+TITLE (max 30)
+Photo Recovery
+
+SHORT DESCRIPTION (max 80)
+Restore copies, clean duplicates and screenshots, keep media private in Vault.
+
+FULL DESCRIPTION (max 4000)
+Photo Recovery helps you find photos and videos already on your device, save copies to a Restored album, free up storage, and keep selected media in a private vault. Scanning and cleaning run on your phone.
+
+RESTORE COPIES
+Browse photos and videos in your gallery, select what you want to keep, and export them into the Restored album (Pictures/Restored). Original quality stays on this device.
+
+QUICK SWIPE CLEAN
+Review items one by one. Swipe left to delete — Android shows its own confirmation — swipe right to move them into the app Vault, or skip to the next item. Videos play in the app.
+
+DUPLICATE CLEANER
+Scan your library with full-file hashing, group identical photos, keep one original, and delete extras to reclaim space.
+
+SCREENSHOT CLEANER
+Find screenshot albums and remove captures you no longer need.
+
+SECURE VAULT
+Move selected photos and videos into a private in-app folder on this device. Restore them to your gallery anytime.
+
+PRIVACY
+Photo Recovery does not upload your photos or videos to our servers. Scanning, cleaning, and vault storage happen on-device.
+
+LANGUAGES
+English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中文, Português.
+
+PLEASE NOTE
+This app works with photos and videos still available in your device media library. It cannot rebuild files that were permanently erased, lost after a factory reset, or stored only on a damaged card. Items you delete follow your phone’s own Recycle bin / Recently Deleted rules.
+
+Support: support@photorecovery.app
+Privacy: https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/privacy_policy.html

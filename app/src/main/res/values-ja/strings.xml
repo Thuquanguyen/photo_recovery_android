@@ -241,4 +241,6 @@
     <string name="quick_clean_bin_queue">ゴミ箱: %1$d件 削除待ち</string>
     <string name="ad_label">広告</string>
     <string name="ad_sponsored">提供</string>
+    <string name="home_scan_button_short">スキャン</string>
+    <string name="settings_share_app_text">Photo Recovery をチェック: %1$s</string>
 </resources>

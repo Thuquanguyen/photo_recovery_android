@@ -241,4 +241,6 @@
     <string name="quick_clean_bin_queue">Papelera: %1$d listos para eliminar</string>
     <string name="ad_label">Anuncio</string>
     <string name="ad_sponsored">Patrocinado</string>
+    <string name="home_scan_button_short">ESCANEAR</string>
+    <string name="settings_share_app_text">Prueba Photo Recovery: %1$s</string>
 </resources>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Play Store preview — Photo Recovery</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #1b1c21;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 20px 12px;
+    }
+    header p.note { color: var(--muted); max-width: 720px; line-height: 1.5; }
+    .langs { display: flex; gap: 8px; margin: 16px 0 8px; }
+    .langs button {
+      background: #2a2b31;
+      color: var(--text);
+      border: 1px solid #3c4043;
+      border-radius: 999px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+    .langs button[aria-pressed="true"] { background: #5b21b6; border-color: #c4b5fd; }
+    .store {
+      max-width: 980px;
+      margin: 0 auto 64px;
+      background: var(--card);
+      border-radius: 24px;
+      padding: 28px 24px 40px;
+    }
+    .hero { display: flex; gap: 20px; align-items: center; }
+    .hero img.icon { width: 96px; height: 96px; border-radius: 22px; }
+    .hero h1 { margin: 0 0 6px; font-size: 28px; }
+    .hero .dev { color: var(--accent); font-size: 14px; }
+    .hero .meta { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .short { margin: 18px 0 8px; font-size: 16px; }
+    .shots {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 12px 0 8px;
+    }
+    .shots img {
+      height: 420px;
+      border-radius: 16px;
+      flex: 0 0 auto;
+    }
+    .feature { width: 100%; border-radius: 12px; margin: 8px 0 20px; display: block; }
+    h2 { font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .full { white-space: pre-wrap; line-height: 1.55; color: #d2d6dc; font-size: 15px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="margin:0 0 8px;">Xem trước trang Play Store</h1>
+    <p class="note">Đây là bản xem trước nội dung sẽ dán vào Play Console — không phải trang live. Copy gốc nằm trong <code>store/listing/</code>, ảnh trong <code>store/graphics/</code>.</p>
+    <div class="langs">
+      <button type="button" id="btn-en" aria-pressed="true">English (default)</button>
+      <button type="button" id="btn-vi" aria-pressed="false">Tiếng Việt</button>
+    </div>
+  </header>
+
+  <section class="store">
+    <img class="feature" src="graphics/feature-graphic-1024x500.png" alt="Feature graphic" />
+    <div class="hero">
+      <img class="icon" src="graphics/icon-512.png" alt="App icon" />
+      <div>
+        <h1>Photo Recovery</h1>
+        <div class="dev">Lab Labs Inc.</div>
+        <div class="meta">Photography · Contains ads · Free</div>
+      </div>
+    </div>
+    <p class="short" id="short"></p>
+    <div class="shots" id="shots-en">
+      <img src="graphics/phone/01-home.png" alt="Home" />
+      <img src="graphics/phone/02-restore.png" alt="Restore" />
+      <img src="graphics/phone/03-swipe.png" alt="Swipe" />
+      <img src="graphics/phone/04-duplicates.png" alt="Duplicates" />
+      <img src="graphics/phone/05-screenshots.png" alt="Screenshots" />
+      <img src="graphics/phone/06-vault.png" alt="Vault" />
+    </div>
+    <div class="shots hidden" id="shots-vi">
+      <img src="graphics/phone-vi/01-home.png" alt="Home VI" />
+      <img src="graphics/phone-vi/02-restore.png" alt="Restore VI" />
+      <img src="graphics/phone-vi/03-swipe.png" alt="Swipe VI" />
+      <img src="graphics/phone-vi/04-duplicates.png" alt="Duplicates VI" />
+      <img src="graphics/phone-vi/05-screenshots.png" alt="Screenshots VI" />
+      <img src="graphics/phone-vi/06-vault.png" alt="Vault VI" />
+    </div>
+    <h2>About this app</h2>
+    <div class="full" id="full"></div>
+  </section>
+
+  <script>
+    const EN_SHORT = "Restore copies, clean duplicates and screenshots, keep media private in Vault.";
+    const VI_SHORT = "Lưu ảnh vào album Restored, dọn ảnh trùng và screenshot, giữ riêng trong Vault.";
+    const EN_FULL = `Photo Recovery helps you find photos and videos already on your device, save copies to a Restored album, free up storage, and keep selected media in a private vault. Scanning and cleaning run on your phone.
+
+RESTORE COPIES
+Browse photos and videos in your gallery, select what you want to keep, and export them into the Restored album (Pictures/Restored). Original quality stays on this device.
+
+QUICK SWIPE CLEAN
+Review items one by one. Swipe left to delete — Android shows its own confirmation — swipe right to move them into the app Vault, or skip to the next item. Videos play in the app.
+
+DUPLICATE CLEANER
+Scan your library with full-file hashing, group identical photos, keep one original, and delete extras to reclaim space.
+
+SCREENSHOT CLEANER
+Find screenshot albums and remove captures you no longer need.
+
+SECURE VAULT
+Move selected photos and videos into a private in-app folder on this device. Restore them to your gallery anytime.
+
+PRIVACY
+Photo Recovery does not upload your photos or videos to our servers. Scanning, cleaning, and vault storage happen on-device.
+
+PLEASE NOTE
+This app works with photos and videos still available in your device media library. It cannot rebuild files that were permanently erased, lost after a factory reset, or stored only on a damaged card.`;
+    const VI_FULL = `Photo Recovery giúp bạn tìm ảnh và video đang có trên máy, lưu bản sao vào album Restored, giải phóng dung lượng và giữ media đã chọn trong Vault riêng. Quét và dọn dẹp chạy ngay trên điện thoại.
+
+LƯU BẢN SAO
+Duyệt ảnh và video trong thư viện, chọn mục cần giữ, rồi xuất vào album Restored (Pictures/Restored). Chất lượng gốc được giữ trên thiết bị này.
+
+QUICK SWIPE CLEAN
+Xem từng mục. Vuốt trái để xóa — Android hiện hộp xác nhận của hệ thống — vuốt phải để chuyển vào Vault trong app, hoặc bỏ qua sang mục tiếp theo. Video phát được ngay trong app.
+
+DỌN ẢNH TRÙNG
+Quét thư viện bằng mã hash toàn file, nhóm ảnh giống hệt nhau, giữ một bản gốc và xóa phần dư để lấy lại dung lượng.
+
+DỌN SCREENSHOT
+Tìm album ảnh chụp màn hình và xóa các bản capture không còn cần.
+
+VAULT RIÊNG
+Chuyển ảnh và video đã chọn vào thư mục riêng trong app, lưu trên thiết bị này. Khôi phục ra thư viện bất cứ lúc nào.
+
+QUYỀN RIÊNG TƯ
+Photo Recovery không tải ảnh hoặc video của bạn lên máy chủ của chúng tôi. Quét, dọn dẹp và Vault đều xử lý trên thiết bị.
+
+LƯU Ý
+Ứng dụng làm việc với ảnh và video vẫn còn trong thư viện media của máy. Không thể dựng lại file đã xóa vĩnh viễn, mất sau factory reset, hoặc chỉ nằm trên thẻ nhớ hỏng.`;
+
+    const shortEl = document.getElementById("short");
+    const fullEl = document.getElementById("full");
+    const btnEn = document.getElementById("btn-en");
+    const btnVi = document.getElementById("btn-vi");
+    function setLang(lang) {
+      const vi = lang === "vi";
+      shortEl.textContent = vi ? VI_SHORT : EN_SHORT;
+      fullEl.textContent = vi ? VI_FULL : EN_FULL;
+      document.getElementById("shots-en").classList.toggle("hidden", vi);
+      document.getElementById("shots-vi").classList.toggle("hidden", !vi);
+      btnEn.setAttribute("aria-pressed", String(!vi));
+      btnVi.setAttribute("aria-pressed", String(vi));
+    }
+    btnEn.onclick = () => setLang("en");
+    btnVi.onclick = () => setLang("vi");
+    setLang("en");
+  </script>
+</body>
+</html>

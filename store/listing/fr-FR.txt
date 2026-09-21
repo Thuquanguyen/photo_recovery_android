@@ -1,0 +1,34 @@
+TITLE (max 30)
+Photo Recovery
+
+SHORT DESCRIPTION (max 80)
+Enregistrez copies, nettoyez doublons et captures, protégez-les dans le Vault.
+
+FULL DESCRIPTION (max 4000)
+Photo Recovery vous aide à trouver les photos et vidéos déjà présentes sur l’appareil, à enregistrer des copies dans l’album Restored, à libérer de l’espace et à garder les fichiers choisis dans un Vault privé. L’analyse s’effectue sur le téléphone.
+
+ENREGISTRER DES COPIES
+Parcourez la galerie, sélectionnez ce que vous voulez conserver et exportez-le vers l’album Restored (Pictures/Restored). La qualité d’origine reste sur cet appareil.
+
+QUICK SWIPE CLEAN
+Examinez les éléments un par un. Glissez à gauche pour supprimer — Android affiche sa propre confirmation —, à droite pour les déplacer dans le Vault, ou passez au suivant. Les vidéos se lisent dans l’app.
+
+NETTOYEUR DE DOUBLONS
+Analysez la bibliothèque par hachage de fichier complet, groupez les photos identiques, gardez l’original et supprimez le reste pour récupérer de l’espace.
+
+NETTOYEUR DE CAPTURES
+Trouvez les albums de captures d’écran et supprimez celles dont vous n’avez plus besoin.
+
+VAULT SÉCURISÉ
+Déplacez photos et vidéos sélectionnées vers un dossier privé dans l’app, sur cet appareil. Restaurez-les dans la galerie à tout moment.
+
+CONFIDENTIALITÉ
+Photo Recovery n’envoie pas vos photos ni vos vidéos vers nos serveurs. Analyse, nettoyage et Vault restent sur l’appareil.
+
+LANGUES
+English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中文, Português.
+
+À NOTER
+L’application fonctionne avec les photos et vidéos encore disponibles dans la médiathèque de l’appareil. Elle ne peut pas reconstruire des fichiers effacés définitivement, perdus après une réinitialisation d’usine, ou stockés uniquement sur une carte endommagée. Les suppressions suivent la corbeille / Éléments récemment supprimés du téléphone.
+
+Support : support@photorecovery.app

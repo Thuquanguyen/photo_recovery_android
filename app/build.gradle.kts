@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.mobile.photo.recovery.io"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.mobile.photo.recovery.io"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
         manifestPlaceholders["admobAppId"] = "ca-app-pub-9626123979964133~1862472468"
@@ -22,7 +22,7 @@ android {
             manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

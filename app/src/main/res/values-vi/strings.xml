@@ -242,4 +242,6 @@
     <string name="quick_clean_bin_queue">Thùng rác: %1$d sẵn sàng xoá</string>
     <string name="ad_label">Quảng cáo</string>
     <string name="ad_sponsored">Được tài trợ</string>
+    <string name="home_scan_button_short">QUÉT</string>
+    <string name="settings_share_app_text">Thử Photo Recovery: %1$s</string>
 </resources>

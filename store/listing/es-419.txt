@@ -1,0 +1,34 @@
+TITLE (máx. 30)
+Photo Recovery
+
+SHORT DESCRIPTION (máx. 80)
+Guarda copias, limpia duplicados y capturas, y protege archivos en el Vault.
+
+FULL DESCRIPTION (máx. 4000)
+Photo Recovery te ayuda a encontrar fotos y vídeos que ya están en tu dispositivo, guardar copias en el álbum Restored, liberar espacio y guardar archivos seleccionados en un Vault privado. El análisis se ejecuta en el teléfono.
+
+GUARDAR COPIAS
+Explora tu galería, elige lo que quieres conservar y expórtalo al álbum Restored (Pictures/Restored). La calidad original permanece en este dispositivo.
+
+QUICK SWIPE CLEAN
+Revisa un elemento a la vez. Desliza a la izquierda para eliminar — Android muestra su propia confirmación —, a la derecha para moverlo al Vault, o sáltalo. Los vídeos se reproducen en la app.
+
+LIMPIADOR DE DUPLICADOS
+Analiza la biblioteca con hash de archivo completo, agrupa fotos idénticas, conserva el original y elimina el resto para recuperar espacio.
+
+LIMPIADOR DE CAPTURAS
+Encuentra álbumes de capturas de pantalla y elimina las que ya no necesitas.
+
+VAULT SEGURO
+Mueve fotos y vídeos seleccionados a una carpeta privada en la app, en este dispositivo. Restáuralos a la galería cuando quieras.
+
+PRIVACIDAD
+Photo Recovery no sube tus fotos ni vídeos a nuestros servidores. El análisis, la limpieza y el Vault se procesan en el dispositivo.
+
+IDIOMAS
+English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中文, Português.
+
+AVISO
+La app funciona con fotos y vídeos que siguen disponibles en la biblioteca multimedia del dispositivo. No puede reconstruir archivos borrados de forma permanente, perdidos tras un restablecimiento de fábrica o que solo estaban en una tarjeta dañada. Lo que eliminas sigue las reglas de la Papelera / Recientes eliminados del teléfono.
+
+Soporte: support@photorecovery.app
