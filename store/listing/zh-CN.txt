@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 请注意
 本应用仅处理设备媒体库中仍可访问的照片和视频。无法重建已被永久删除、恢复出厂设置后丢失、或仅存在于损坏存储卡上的文件。你删除的项目遵循手机自带回收站 / 最近删除规则。
 
-支持：support@photorecovery.app
+支持：ngotuan101910@gmail.com

@@ -13,7 +13,7 @@ Phone screenshots: store/graphics/phone/*.png (upload in numbered order)
 Phone screenshots (Vietnamese listing): store/graphics/phone-vi/*.png
 
 Promo video: optional — skip for first release
-Contact email: support@photorecovery.app
+Contact email: ngotuan101910@gmail.com
 Privacy policy:
 https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/privacy_policy.html
 
@@ -23,7 +23,7 @@ Store settings
 App category: Photography
 Tags (pick closest available): Photo manager, Gallery, File manager
 Website: leave blank unless you have a landing page
-Email: support@photorecovery.app
+Email: ngotuan101910@gmail.com
 Phone: optional
 External marketing: No (unless you run ads)
 

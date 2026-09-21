@@ -1,35 +1,37 @@
 TITLE (tối đa 30)
-Photo Recovery
+Photo Recovery: Dọn ảnh
 
 SHORT DESCRIPTION (tối đa 80)
-Lưu ảnh vào album Restored, dọn ảnh trùng và screenshot, giữ riêng trong Vault.
+Sắp xếp thư viện: lưu bản sao, dọn ảnh trùng, screenshot và cất ảnh riêng tư.
 
 FULL DESCRIPTION (tối đa 4000)
-Photo Recovery giúp bạn tìm ảnh và video đang có trên máy, lưu bản sao vào album Restored, giải phóng dung lượng và giữ media đã chọn trong Vault riêng. Quét và dọn dẹp chạy ngay trên điện thoại.
+Photo Recovery là công cụ gọn nhẹ để xem lại, sắp xếp và dọn dẹp ảnh, video trong thư viện của bạn. Dễ dàng lưu bản sao những kỷ niệm quan trọng, tìm ảnh trùng, xóa ảnh chụp màn hình không cần thiết và chuyển mục riêng tư vào Vault.
 
-LƯU BẢN SAO
-Duyệt ảnh và video trong thư viện, chọn mục cần giữ, rồi xuất vào album Restored (Pictures/Restored). Chất lượng gốc được giữ trên thiết bị này.
+Mọi thao tác quét và phân tích thư viện đều diễn ra trên thiết bị của bạn.
+
+LƯU BẢN SAO VÀO ALBUM RESTORED
+Chọn ảnh hoặc video trong thư viện rồi xuất bản sao vào album Restored (Pictures/Restored hoặc Movies/Restored). Bạn có thêm một bản để sắp xếp và giữ lại ngay trên thiết bị.
 
 QUICK SWIPE CLEAN
-Xem từng mục. Vuốt trái để xóa — Android hiện hộp xác nhận của hệ thống — vuốt phải để chuyển vào Vault trong app, hoặc bỏ qua sang mục tiếp theo. Video phát được ngay trong app.
+Xem từng mục theo cách trực quan. Vuốt trái để xóa với hộp xác nhận của Android, vuốt phải để chuyển vào Vault, hoặc bỏ qua để xem mục tiếp theo. Có thể xem ảnh và phát video ngay trong ứng dụng.
 
 DỌN ẢNH TRÙNG
-Quét thư viện bằng mã hash toàn file, nhóm ảnh giống hệt nhau, giữ một bản gốc và xóa phần dư để lấy lại dung lượng.
+Quét thư viện, nhóm các tệp giống hệt nhau và chọn những bản dư để xóa. Giữ lại một bản bạn muốn lưu để giải phóng dung lượng có kiểm soát.
 
 DỌN SCREENSHOT
-Tìm album ảnh chụp màn hình và xóa các bản capture không còn cần.
+Tìm ảnh chụp màn hình trong thư viện và chọn nhiều mục để xóa một lúc. Đây là cách nhanh để dọn các ảnh capture cũ không còn cần thiết.
 
-VAULT RIÊNG
-Chuyển ảnh và video đã chọn vào thư mục riêng trong app, lưu trên thiết bị này. Khôi phục ra thư viện bất cứ lúc nào.
+VAULT RIÊNG TƯ
+Chuyển ảnh và video đã chọn vào không gian riêng trong ứng dụng. Khôi phục chúng về thư viện bất cứ khi nào bạn cần.
 
 QUYỀN RIÊNG TƯ
-Photo Recovery không tải ảnh hoặc video của bạn lên máy chủ của chúng tôi. Quét, dọn dẹp và Vault đều xử lý trên thiết bị.
+Ảnh và video của bạn không được ứng dụng tải lên máy chủ của chúng tôi. Quét, dọn dẹp và Vault được xử lý cục bộ trên thiết bị.
 
 NGÔN NGỮ
 English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中文, Português.
 
 LƯU Ý
-Ứng dụng làm việc với ảnh và video vẫn còn trong thư viện media của máy. Không thể dựng lại file đã xóa vĩnh viễn, mất sau factory reset, hoặc chỉ nằm trên thẻ nhớ hỏng. Mục bạn xóa tuân theo thùng rác / Recently Deleted của chính điện thoại.
+Ứng dụng làm việc với ảnh và video vẫn còn trong thư viện media của điện thoại. Ứng dụng không thể khôi phục tệp đã bị xóa vĩnh viễn, mất sau khi khôi phục cài đặt gốc hoặc nằm trên thẻ nhớ bị hỏng. Các mục bạn xóa tuân theo cơ chế Thùng rác/Mới xóa gần đây của thiết bị.
 
-Hỗ trợ: support@photorecovery.app
+Hỗ trợ: ngotuan101910@gmail.com
 Chính sách: https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/privacy_policy.html

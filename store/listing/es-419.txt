@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 AVISO
 La app funciona con fotos y vídeos que siguen disponibles en la biblioteca multimedia del dispositivo. No puede reconstruir archivos borrados de forma permanente, perdidos tras un restablecimiento de fábrica o que solo estaban en una tarjeta dañada. Lo que eliminas sigue las reglas de la Papelera / Recientes eliminados del teléfono.
 
-Soporte: support@photorecovery.app
+Soporte: ngotuan101910@gmail.com

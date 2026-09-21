@@ -82,7 +82,7 @@ private const val PRIVACY_POLICY_URL =
     "https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/privacy_policy.html"
 private const val TERMS_OF_SERVICE_URL =
     "https://htmlpreview.github.io/?https://raw.githubusercontent.com/Thuquanguyen/photo_recovery_android/main/policy/terms_of_service.html"
-private const val SUPPORT_EMAIL = "support@photorecovery.app"
+private const val SUPPORT_EMAIL = "ngotuan101910@gmail.com"
 
 /**
  * Guards against crashing when no app can handle the intent (e.g. no browser/mail client), and

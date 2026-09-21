@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 HINWEIS
 Die App arbeitet mit Fotos und Videos, die noch in der Mediathek des Geräts verfügbar sind. Sie kann Dateien nicht wiederherstellen, die dauerhaft gelöscht, nach einem Werksreset verloren oder nur auf einer beschädigten Karte gespeichert waren. Gelöschte Elemente folgen dem Papierkorb / Zuletzt gelöscht des Telefons.
 
-Support: support@photorecovery.app
+Support: ngotuan101910@gmail.com

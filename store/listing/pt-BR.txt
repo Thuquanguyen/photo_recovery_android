@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 AVISO
 O app funciona com fotos e vídeos ainda disponíveis na biblioteca de mídia do dispositivo. Ele não reconstrói arquivos apagados de forma permanente, perdidos após reset de fábrica ou que estavam só em um cartão danificado. Itens excluídos seguem a Lixeira / Recém excluídos do próprio celular.
 
-Suporte: support@photorecovery.app
+Suporte: ngotuan101910@gmail.com

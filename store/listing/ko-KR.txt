@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 안내
 이 앱은 기기 미디어 라이브러리에 아직 남아 있는 사진과 동영상을 대상으로 합니다. 영구 삭제된 파일, 초기화 후 사라진 파일, 손상된 카드에만 있던 파일은 복원할 수 없습니다. 삭제한 항목은 휴대폰 자체의 휴지통 / 최근 삭제한 항목 규칙을 따릅니다.
 
-지원: support@photorecovery.app
+지원: ngotuan101910@gmail.com

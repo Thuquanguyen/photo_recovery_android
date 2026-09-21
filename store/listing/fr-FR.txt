@@ -31,4 +31,4 @@ English, Tiếng Việt, Español, 日本語, Français, Deutsch, 한국어, 中
 À NOTER
 L’application fonctionne avec les photos et vidéos encore disponibles dans la médiathèque de l’appareil. Elle ne peut pas reconstruire des fichiers effacés définitivement, perdus après une réinitialisation d’usine, ou stockés uniquement sur une carte endommagée. Les suppressions suivent la corbeille / Éléments récemment supprimés du téléphone.
 
-Support : support@photorecovery.app
+Support : ngotuan101910@gmail.com
